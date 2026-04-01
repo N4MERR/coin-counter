@@ -74,7 +74,7 @@ if __name__ == "__main__":
     Entry point for the script. Parses command line arguments and triggers processing.
     """
     parser = argparse.ArgumentParser(description="Count YOLO labels from a dataset path.")
-    parser.add_argument("dataset_path", type=str, help="Path to the dataset directory containing classes.txt and the labels folder")
+    parser.add_argument("--dataset_path", type=str, help="Path to the dataset directory containing classes.txt and the labels folder")
     args = parser.parse_args()
     
     process_dataset(args.dataset_path)
