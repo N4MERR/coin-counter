@@ -1,16 +1,15 @@
 """
 Module for splitting a dataset into training and validation sets.
-Splits the dataset based on the total object (coin) count rather than image count.
+Splits the dataset using a greedy approach based on the total object (coin) count to ensure even distribution of dense and sparse images.
 """
 import os
 import shutil
-import random
 import argparse
 
 class DatasetSplitter:
     """
-    Handles the random distribution of image and label files into train and val directories
-    based on the object count found in the label files.
+    Handles the distribution of image and label files into train and val directories
+    by sorting images by object count and greedily assigning them to maintain the split ratio.
     """
     def __init__(self, source_dir, target_dir, split_ratio=0.8):
         """
@@ -45,8 +44,8 @@ class DatasetSplitter:
 
     def split_data(self):
         """
-        Calculates the object count per image, shuffles the dataset, and distributes
-        files to reach the target split ratio based on total objects.
+        Calculates the object count per image, sorts them descending, and distributes
+        files to maintain the target split ratio of total objects.
         """
         self.setup_directories()
 
@@ -54,30 +53,37 @@ class DatasetSplitter:
         labels_dir = os.path.join(self.source_dir, 'labels')
 
         all_images = [f for f in os.listdir(images_dir) if f.endswith('.jpg')]
-        random.shuffle(all_images)
 
-        image_object_counts = {}
+        image_data = []
         total_objects = 0
 
         for image_name in all_images:
             label_name = image_name.replace('.jpg', '.txt')
             label_path = os.path.join(labels_dir, label_name)
             obj_count = self.count_objects_in_file(label_path)
-            image_object_counts[image_name] = obj_count
+            image_data.append((image_name, obj_count))
             total_objects += obj_count
 
-        target_train_objects = int(total_objects * self.split_ratio)
-        current_train_objects = 0
+        image_data.sort(key=lambda x: x[1], reverse=True)
 
         train_images = []
         val_images = []
+        current_train_objects = 0
+        current_val_objects = 0
 
-        for image_name in all_images:
-            if current_train_objects < target_train_objects:
+        for image_name, obj_count in image_data:
+            current_total = current_train_objects + current_val_objects
+            if current_total == 0:
+                current_ratio = 0.0
+            else:
+                current_ratio = current_train_objects / current_total
+
+            if current_ratio < self.split_ratio:
                 train_images.append(image_name)
-                current_train_objects += image_object_counts[image_name]
+                current_train_objects += obj_count
             else:
                 val_images.append(image_name)
+                current_val_objects += obj_count
 
         for image_name in train_images:
             label_name = image_name.replace('.jpg', '.txt')
@@ -91,11 +97,10 @@ class DatasetSplitter:
             if os.path.exists(os.path.join(labels_dir, label_name)):
                 shutil.copy(os.path.join(labels_dir, label_name), os.path.join(self.target_dir, 'labels', 'val', label_name))
 
-        val_objects = total_objects - current_train_objects
         print("Dataset split complete based on object count.")
         print(f"Total Objects: {total_objects}")
         print(f"Train Objects: {current_train_objects} ({len(train_images)} images)")
-        print(f"Val Objects: {val_objects} ({len(val_images)} images)")
+        print(f"Val Objects: {current_val_objects} ({len(val_images)} images)")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Split dataset via command line arguments.")
