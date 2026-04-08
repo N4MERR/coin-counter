@@ -34,7 +34,7 @@ class CoinCounterApp(QMainWindow):
         self.init_main_screen()
 
         self.currency = "CZK"
-        self.model = YOLO("best.pt")
+        self.model = YOLO("AI_model/best.pt")
         self.coin_values = self.load_yaml_config()
         self.image_data_list = []
 
@@ -128,7 +128,7 @@ class CoinCounterApp(QMainWindow):
         parsed_values = {}
 
         try:
-            with open("data.yaml", "r") as file:
+            with open("AI_model/data.yaml", "r") as file:
                 data = yaml.safe_load(file)
 
             if not isinstance(data, dict) or "names" not in data:
