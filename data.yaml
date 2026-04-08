@@ -1,0 +1,12 @@
+path: /content/split_dataset
+train: images/train
+val: images/val
+test: /content/test_data
+nc: 6
+names:
+- 10kc
+- 1kc
+- 20kc
+- 2kc
+- 50kc
+- 5kc
