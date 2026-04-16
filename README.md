@@ -1,4 +1,4 @@
-# Coin Identifier
+# Coin Counter
 
 ## Základní informace
 
