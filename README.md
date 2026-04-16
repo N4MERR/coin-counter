@@ -43,8 +43,8 @@ A desktop application that uses a pre-trained AI model to identify coins from im
 
 * **Language:** Python
 * **UI Framework:** PySide
-* **Machine Learning:** Pre-trained model
-* **Image Processing:** OpenCV or similar libraries
+* **AI Model:** YOLOv8
+* **Image Processing:** OpenCV
 
 ---
 
