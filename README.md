@@ -1,113 +1,37 @@
-# Coin Counter
+# Coin Identifier
 
-## Základní informace
+**Author:** Zhao Xiang Yang | **School:** SPŠE Ječná | **Project Type:** School Project
 
-* **Název projektu:** Coin Identifier
-* **Autor:** Zhao Xiang Yang
-* **Škola:** SPŠE Ječná
-* **Typ projektu:** Školní projekt
+A desktop application designed to detect, classify, and count coins using machine learning.
 
----
+## Installation and Execution
 
-## 1. Požadavky na aplikaci
+No installation or internet connection is required to run the compiled application.
 
-### Funkční požadavky
+1. **[Download the Latest Version](https://github.com/N4MERR/coin-counter/releases/latest)**
+2. Download the `coin_value_predictor.zip` file.
+3. Extract the folder to your computer.
+4. Run the `.exe` file.
 
-* Uživatel může nahrát jeden nebo více obrázků mincí
-* Aplikace identifikuje mince pomocí AI modelu
-* Aplikace zobrazí název mince a confidence score
-* Uživatel může změnit AI model
-* Aplikace umožňuje jednoduché ovládání přes GUI
+## How It Works
 
-### Nefunkční požadavky
+### Workflow
+1. Launch the application.
+2. Upload a single image or multiple images (JPG or PNG).
+3. The app processes the image and runs the YOLOv8 model.
+4. Detected coins and their values are displayed in the GUI.
 
-* Aplikace běží jako desktopová (.exe)
-* Rychlá odezva (řádově sekundy)
-* Offline provoz (není potřeba internet)
-* Podpora formátů JPG, PNG
+## Configuration & Custom AI Models
 
-### Use Case (textově)
+The application allows you to swap or upgrade the AI model. 
 
-* Uživatel nahraje obrázek → aplikace zpracuje → zobrazí výsledek
-* Uživatel nahradí model → aplikace použije nový model
+### Changing the Model
+1. Place your model in the `AI_model` folder.
+2. Ensure the model is in `.pt` format.
+3. Provide a corresponding `.yaml` configuration file in the same folder.
 
----
-
-## 2. Architektura aplikace
-
-### Komponenty
-
-* **GUI (PySide)**
-  Uživatelské rozhraní
-
-* **Inference modul (YOLOv8)**
-  Detekce a klasifikace mincí
-
-* **Image processing (OpenCV)**
-  Předzpracování obrazu
-
-### Schéma
-
-```id="m92k1x"
-Uživatel → GUI → YOLOv8 model → Výsledek → GUI
-```
-
----
-
-## 3. Chování aplikace
-
-### Typický průběh
-
-1. Uživatel spustí aplikaci
-2. Nahraje obrázek
-3. Proběhne preprocessing
-4. Model provede detekci
-5. Výsledek se zobrazí
-
-### Stavy aplikace
-
-* Idle
-* Loading Image
-* Processing
-* Displaying Result
-
----
-
-## 4. Použité technologie a závislosti
-
-### Knihovny
-
-* Python
-* PySide
-* YOLOv8 (Ultralytics)
-* OpenCV
-
-### Závislosti
-
-* Lokální `.pt` model
-* YAML konfigurační soubor
-
----
-
-## 5. Právní a licenční aspekty
-
-* YOLOv8 (Ultralytics) – open-source licence
-* OpenCV – open-source
-* Projekt je určen pro vzdělávací účely
-
----
-
-## 6. Konfigurace aplikace
-
-Aplikace umožňuje změnu modelu:
-
-* Model musí být uložen ve složce `AI_model`
-* Musí mít formát `.pt`
-* K modelu je nutné dodat odpovídající `.yaml` soubor
-
-### Příklad YAML konfigurace
-
-```yaml id="p4x8zt"
+**Example YAML Configuration:**
+```yaml
 path: /content/split_dataset
 train: images/train
 val: images/val
@@ -123,79 +47,21 @@ names:
   - 5kc
 ```
 
----
+### Training a New Model
+To improve detection accuracy or add support for new coins, you can train a custom YOLOv8 model.
+* **Guide:** [AI Model Training Guide](https://drive.google.com/drive/folders/1b6icp6LVGExb0CjP5T9gkbILRX_tSvUS?usp=drive_link)
 
-## 7. Instalace a spuštění
+## Performance & Known Issues
 
-* Stáhnout `.exe` soubor z Releases
-* Spustit aplikaci
+The current model was tested with Czech coins (1, 2, 5, 10, 20, 50 CZK) under various lighting conditions and multi-image batches.
 
-Není potřeba instalace ani internet.
+* **High Accuracy:** 10, 20, and 50 CZK coins.
+* **Lower Accuracy:** 1, 2, and 5 CZK coins.
+* **Known Issues:** The model is sensitive to image quality, and struggles differentiating the smaller denomination coins.
 
----
+## Technical Architecture
 
-## 8. Chybové stavy
-
-* **Neplatný soubor**
-  → nahrát podporovaný formát
-
-* **Chybějící model (.pt)**
-  → zkontrolovat složku `AI_model`
-
-* **Chybějící YAML soubor**
-  → přidat odpovídající konfiguraci
-
-* **Nízká kvalita obrázku**
-  → použít kvalitnější snímek
-
----
-
-## 9. Testování a validace
-
-### Testy
-
-* Test českých mincí (1, 2, 5, 10, 20, 50 Kč)
-* Test různých světelných podmínek
-* Test více obrázků najednou
-
-### Výsledky
-
-* Vysoká přesnost u 10, 20 a 50 Kč
-* Horší výsledky u 1 Kč, 2 Kč a 5 Kč
-
-### Zhodnocení
-
-Aplikace splňuje požadavky, ale přesnost závisí na kvalitě datasetu a podobnosti mincí.
-
----
-
-## 10. Verze a známé chyby
-
-### Verze
-
-* v1.0 – základní verze
-
-### Známé problémy
-
-* Nižší přesnost u mincí 1 Kč, 2 Kč, 5 Kč
-* Citlivost na kvalitu obrázku
-
----
-
-## 14. Import / Export
-
-### Import
-
-* JPG, PNG
-* Jeden nebo více obrázků
-
-### Export
-
-* Výstup pouze v GUI
-* Export není implementován
-
----
-
-## Závěr
-
-Aplikace Coin Identifier využívá model YOLOv8 pro rozpoznávání českých mincí. Umožňuje flexibilní výměnu modelu a demonstruje praktické využití AI v oblasti počítačového vidění.
+* **GUI:** PySide (Provides the user interface)
+* **Inference Module:** YOLOv8 / Ultralytics (Performs coin detection and classification)
+* **Image Processing:** OpenCV (Handles image preprocessing)
+* **Language:** Python
