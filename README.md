@@ -1,4 +1,4 @@
-# Coin Identifier
+# Coin Counter
 
 **Author:** Zhao Xiang Yang | **School:** SPŠE Ječná | **Project Type:** School Project
 
