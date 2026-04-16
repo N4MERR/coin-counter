@@ -1,4 +1,4 @@
-# Dokumentace projektu – Coin Identifier
+# Coin Identifier
 
 ## Základní informace
 
